@@ -194,7 +194,7 @@ impl JsonRpcRequestProcessor {
     // -----------------
     // Accounts
     // -----------------
-    pub async fn get_account_info(
+    pub fn get_account_info(
         &self,
         pubkey: &Pubkey,
         config: Option<RpcAccountInfoConfig>,
@@ -211,8 +211,7 @@ impl JsonRpcRequestProcessor {
         };
         if let Err(err) = self
             .accounts_manager
-            .ensure_accounts_from_holder(holder)
-            .await {
+            .ensure_accounts_from_holder(holder) {
             trace!("ensure_accounts failed: {:?}", err);
         }
         let encoding = encoding.unwrap_or(UiAccountEncoding::Binary);
