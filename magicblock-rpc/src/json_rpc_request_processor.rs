@@ -4,6 +4,7 @@ use std::{
 };
 
 use jsonrpc_core::{Error, ErrorCode, Metadata, Result, Value};
+use conjunto_transwise::TransactionAccountsHolder;
 use log::*;
 use magicblock_accounts::AccountsManager;
 use magicblock_bank::{
@@ -193,7 +194,7 @@ impl JsonRpcRequestProcessor {
     // -----------------
     // Accounts
     // -----------------
-    pub fn get_account_info(
+    pub async fn get_account_info(
         &self,
         pubkey: &Pubkey,
         config: Option<RpcAccountInfoConfig>,
@@ -203,6 +204,17 @@ impl JsonRpcRequestProcessor {
             data_slice,
             ..
         } = config.unwrap_or_default();
+        let holder = TransactionAccountsHolder {
+            writable: vec![pubkey],
+            readonly: Vec::new(),
+            payer: None,
+        };
+        if let Err(err) = self
+            .accounts_manager
+            .ensure_accounts_from_holder(holder)
+            .await {
+            trace!("ensure_accounts failed: {:?}", err);
+        }
         let encoding = encoding.unwrap_or(UiAccountEncoding::Binary);
         let response = get_encoded_account(
             &self.bank, pubkey, encoding, data_slice, None,

@@ -122,7 +122,6 @@ where
         // Make sure all accounts used by the transaction are cloned properly if needed
         self.ensure_accounts_from_holder(
             accounts_holder,
-            tx.signature().to_string(),
         )
         .await
     }
@@ -131,7 +130,6 @@ where
     pub async fn ensure_accounts_from_holder(
         &self,
         accounts_holder: TransactionAccountsHolder,
-        _signature: String,
     ) -> AccountsResult<Vec<Signature>> {
         // Clone all the accounts involved in the transaction in parallel
         let (readonly_clone_outputs, writable_clone_outputs) = try_join(
