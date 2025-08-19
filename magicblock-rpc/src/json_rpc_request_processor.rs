@@ -209,9 +209,9 @@ impl JsonRpcRequestProcessor {
             readonly: Vec::new(),
             payer: *pubkey,
         };
-        if let Err(err) = self
-            .accounts_manager
-            .ensure_accounts_from_holder(holder) {
+        if let Err(err) = tokio::runtime::Handle::current()
+            .block_on(self.accounts_manager.ensure_accounts_from_holder(holder))
+        {
             trace!("ensure_accounts failed: {:?}", err);
         }
         let encoding = encoding.unwrap_or(UiAccountEncoding::Binary);
