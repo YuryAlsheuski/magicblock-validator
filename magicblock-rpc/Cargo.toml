@@ -11,6 +11,7 @@ edition.workspace = true
 bs58 = { workspace = true }
 base64 = { workspace = true }
 bincode = { workspace = true }
+conjunto-transwise = { workspace = true }
 log = { workspace = true }
 jsonrpc-core = { workspace = true }
 jsonrpc-core-client = { workspace = true }
