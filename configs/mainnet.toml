@@ -1,30 +1,43 @@
 [accounts]
-remote.cluster = "mainnet"
+remote = "https://api.mainnet-beta.solana.com/"
 lifecycle = "replica"
-commit = { frequency_millis = 50_000 }
+allowed-programs = []
+max-monitored-accounts = 2048
+
+[accounts.commit]
+frequency_millis = 100000000
+compute_unit_price = 1000000
+
+[accounts.payer]
+init_sol = 1000
 
 [accounts.db]
-# path to root directory where database files are stored
-directory = "/tmp/accounts-db/adb"
-# size of the main storage, we have to preallocate in advance
-# it's advised to set this value based on formula 1KB * N * 3,
-# where N is the number of accounts expected to be stored in
-# database, e.g. for million accounts this would be 3GB
-db-size = 1048576000 # 1GB
-# minimal indivisible unit of addressing in main storage
-# offsets are calculated in terms of blocks
-block-size = "block256" # possible values block128 | block256 | block512
-# size of index file, we have to preallocate,
-# can be as low as 1% of main storage size, but setting it to higher values won't hurt
-index-map-size = 20485760
-# max number of snapshots to keep around
-max-snapshots = 7
-# how frequently (slot-wise) we should take snapshots
-snapshot-frequency = 1024
+db-size = 3221225472
+block-size = "block256"
+index-map-size = 67108864
+max-snapshots = 4
+snapshot-frequency = 20000
 
 [rpc]
 addr = "0.0.0.0"
 port = 8899
+max-ws-connections = 16384
+
+[geyser_grpc]
+addr = "0.0.0.0"
+port = 10000
 
 [validator]
 millis_per_slot = 50
+sigverify = true
+country_code = "US"
+
+[ledger]
+reset = true
+size = 107374182400
+
+[metrics]
+enabled = true
+system_metrics_tick_interval_secs = 30
+addr = "0.0.0.0"
+port = 9000
