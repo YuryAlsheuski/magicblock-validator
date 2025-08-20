@@ -1,5 +1,5 @@
 [accounts]
-remote = "https://api.mainnet-beta.solana.com/"
+remote.url = "https://api.mainnet-beta.solana.com/"
 lifecycle = "replica"
 allowed-programs = []
 max-monitored-accounts = 2048
