@@ -8,9 +8,6 @@ max-monitored-accounts = 2048
 frequency_millis = 100000000
 compute_unit_price = 1000000
 
-[accounts.payer]
-init_sol = 1000
-
 [accounts.db]
 db-size = 3221225472
 block-size = "block256"
