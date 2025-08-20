@@ -29,10 +29,6 @@ millis_per_slot = 50
 sigverify = true
 country_code = "US"
 
-[ledger]
-reset = true
-size = 107374182400
-
 [metrics]
 enabled = true
 system_metrics_tick_interval_secs = 30
