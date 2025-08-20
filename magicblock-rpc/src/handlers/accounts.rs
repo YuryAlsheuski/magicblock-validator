@@ -16,7 +16,7 @@ pub struct AccountsDataImpl;
 impl AccountsData for AccountsDataImpl {
     type Metadata = JsonRpcRequestProcessor;
 
-    fn get_account_info(
+    async fn get_account_info(
         &self,
         meta: Self::Metadata,
         pubkey_str: String,
@@ -24,7 +24,7 @@ impl AccountsData for AccountsDataImpl {
     ) -> Result<RpcResponse<Option<UiAccount>>> {
         debug!("get_account_info rpc request received: {:?}", pubkey_str);
         let pubkey = verify_pubkey(&pubkey_str)?;
-        meta.get_account_info(&pubkey, config)
+        meta.get_account_info(&pubkey, config).await
     }
 
     fn get_multiple_accounts(
