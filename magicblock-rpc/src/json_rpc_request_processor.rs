@@ -3,8 +3,8 @@ use std::{
     time::Duration,
 };
 
-use conjunto_transwise::transaction_accounts_holder::TransactionAccountsHolder;
 use jsonrpc_core::{Error, ErrorCode, Metadata, Result, Value};
+use conjunto_transwise::{transaction_accounts_holder::TransactionAccountsHolder};
 use log::*;
 use magicblock_accounts::AccountsManager;
 use magicblock_bank::{
@@ -194,7 +194,7 @@ impl JsonRpcRequestProcessor {
     // -----------------
     // Accounts
     // -----------------
-    pub async fn get_account_info(
+    pub fn get_account_info(
         &self,
         pubkey: &Pubkey,
         config: Option<RpcAccountInfoConfig>,
@@ -209,10 +209,11 @@ impl JsonRpcRequestProcessor {
             readonly: Vec::new(),
             payer: *pubkey,
         };
-        if let Err(err) = self
-            .accounts_manager
-            .ensure_accounts_from_holder(holder)
-            .await
+        
+        if let Err(err) =  tokio::task::block_in_place(|| {
+            tokio::runtime::Handle::current()
+                .block_on(self.accounts_manager.ensure_accounts_from_holder(holder))
+        })
         {
             trace!("ensure_accounts failed: {:?}", err);
         }
